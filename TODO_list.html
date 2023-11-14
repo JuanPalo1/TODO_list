@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>TODO_list</title>
+    <link rel="stylesheet" type="text/css" href="TODO_list.css">
+    <style>
+      li.completed {
+        text-decoration: line-through;
+      }
+      button.delete {
+        cursor: pointer;
+        background-color: white;
+        border: 1px solid black;
+        padding: 2px 10px;
+        border-radius: 15px;
+        margin-left: 5px;
+      }
+    </style>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+
+        document.querySelector('#new-task').onsubmit = () => {
+          const cb = document.createElement("INPUT");
+          cb.setAttribute("type", "checkbox");
+
+          const li = document.createElement('li');
+          const deleteButton = document.createElement('button');
+          deleteButton.className = 'delete';
+          deleteButton.innerHTML = '❌';
+          li.appendChild(cb);
+          li.innerHTML += document.querySelector('#task').value;
+          li.appendChild(deleteButton);
+          
+          document.querySelector('#tasks').append(li);
+
+          document.querySelector('#task').value = '';
+
+          return false;
+        };
+
+        document.querySelector('#marcar-todas').addEventListener('click', () => {
+          const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+          checkboxes.forEach((checkbox) => {
+            checkbox.checked = true;
+            toggleCompletedState(checkbox);
+          });
+        });
+
+        document.querySelector('#tasks').addEventListener('click', (event) => {
+          if (event.target.classList.contains('delete')) {
+            const li = event.target.parentElement;
+            li.remove();
+          }
+        });
+
+        document.querySelector('#tasks').addEventListener('change', (event) => {
+          if (event.target.type === 'checkbox') {
+            toggleCompletedState(event.target);
+          }
+        });
+
+        function toggleCompletedState(checkbox) {
+          const li = checkbox.parentElement;
+          if (checkbox.checked) {
+            li.classList.add('completed');
+          } else {
+            li.classList.remove('completed');
+          }
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <p>Computer Science</p>
+    <h1>Tareas</h1>
+    <form id="new-task">
+      <input id="task" autocomplete="off" autofocus placeholder="Nueva Tarea" type="text">
+      <input type="submit">
+    </form>
+    <input type="button" value="Marcar Todas" id="marcar-todas">
+    <ol id="tasks">
+    </ol>
+  </body>
+</html>
